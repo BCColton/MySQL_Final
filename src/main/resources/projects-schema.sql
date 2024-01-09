@@ -7,19 +7,19 @@ DROP TABLE IF EXISTS category;
 DROP TABLE IF EXISTS project;
 
 CREATE TABLE project
-	(project_id INT NOT NULL, project_name VARCHAR(20) NOT NULL, estimated_hours INT,
-	 actual_hours INT, difficulty CHAR(1), notes VARCHAR(200), PRIMARY KEY(project_id));
+	(project_id INT NOT NULL, project_name VARCHAR(128) NOT NULL, estimated_hours DECIMAL(7,2),
+	 actual_hours DECIMAL(7,2), difficulty INT, notes TEXT, PRIMARY KEY(project_id));
 CREATE TABLE category
-	(category_id INT NOT NULL, category_name VARCHAR(20), PRIMARY KEY(category_id));
+	(category_id INT NOT NULL, category_name VARCHAR(128) NOT NULL, PRIMARY KEY(category_id));
 CREATE TABLE project_category
 	(project_id INT NOT NULL, category_id INT NOT NULL, 
      FOREIGN KEY(project_id) REFERENCES project(project_id) ON DELETE CASCADE, 
      FOREIGN KEY(category_id) REFERENCES category(category_id) ON DELETE CASCADE);
 CREATE TABLE material
-	(material_id INT NOT NULL, project_id INT NOT NULL, material_name VARCHAR(50),
-     num_required INT, cost DECIMAL(6,2), PRIMARY KEY(material_id), 
+	(material_id INT NOT NULL, project_id INT NOT NULL, material_name VARCHAR(128) NOT NULL,
+     num_required INT, cost DECIMAL(7,2), PRIMARY KEY(material_id), 
      FOREIGN KEY(project_id) REFERENCES project(project_id));
 CREATE TABLE step
-	(step_id INT NOT NULL, project_id INT NOT NULL, step_text VARCHAR(200), step_order INT,
+	(step_id INT NOT NULL, project_id INT NOT NULL, step_text VARCHAR(128) NOT NULL, step_order INT NOT NULL,
      PRIMARY KEY(step_id),
      FOREIGN KEY(project_id) REFERENCES project(project_id));

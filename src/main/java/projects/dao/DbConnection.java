@@ -16,7 +16,7 @@ public class DbConnection {
 	
 	public static Connection getConnection() {
 		
-		String uri = String.format("jdbc:mysql://%d:%s?user-%s&password-%s", HOST, PORT, SCHEMA, USER, PASSWORD);		
+		String uri = String.format("jdbc:mysql://%s:%d/%s?user=%s&password=%s", HOST, PORT, SCHEMA, USER, PASSWORD);		
 		
 		try {
 			Connection conn = DriverManager.getConnection(uri);
