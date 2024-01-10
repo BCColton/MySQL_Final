@@ -6,7 +6,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -204,6 +203,77 @@ public class ProjectDao extends DaoBase {
 				
 				return materials;			
 			}
+		}
+	}
+
+	public boolean modifyProjectDetails(Project project) {
+		//@formatter:off
+		String sql = ""
+			+ "UPDATE " + PROJECT_TABLE + " SET "
+			+ "project_name = ?, "
+			+ "estimated_hours = ?, "
+			+ "actual_hours = ?, "
+			+ "difficulty = ?, "
+			+ "notes = ? "
+			+ "WHERE project_id = ?";
+		//@formatter:on
+		
+		try(Connection conn = DbConnection.getConnection()) {
+			
+			startTransaction(conn);
+			
+			try(PreparedStatement stmt = conn.prepareStatement(sql)) {
+				
+				setParameter(stmt, 1, project.getProjectName(), String.class);
+				setParameter(stmt, 2, project.getEstimatedHours(), BigDecimal.class);
+				setParameter(stmt, 3, project.getActualHours(), BigDecimal.class);
+				setParameter(stmt, 4, project.getDifficulty(), Integer.class);
+				setParameter(stmt, 5, project.getNotes(), String.class);
+				setParameter(stmt, 6, project.getProjectId(), Integer.class);
+				
+				boolean isSuccessful = stmt.executeUpdate() == 1;
+				
+				commitTransaction(conn);
+				
+				return isSuccessful;			
+				
+			} catch (SQLException e) {
+				rollbackTransaction(conn);
+				throw new DbException(e);
+			}
+			
+		} catch(SQLException e) {
+			throw new DbException(e);
+		}
+	}
+
+	public boolean deleteProject(Integer projectId) {
+		//@formatter:off
+		String sql = ""
+			+ "DELETE FROM " + PROJECT_TABLE + " WHERE project_id = ?";
+		//@formatter:on
+		
+		try(Connection conn = DbConnection.getConnection()) {
+			
+			startTransaction(conn);
+			
+			try(PreparedStatement stmt = conn.prepareStatement(sql)) {
+				
+				setParameter(stmt, 1, projectId, Integer.class);
+				
+				boolean isSuccessful = stmt.executeUpdate() == 1;
+				
+				commitTransaction(conn);
+				
+				return isSuccessful;
+				
+			} catch(SQLException e) {
+				rollbackTransaction(conn);
+				
+				throw new DbException(e);
+			}
+		} catch(SQLException e) {
+			throw new DbException(e);
 		}
 	} 
 

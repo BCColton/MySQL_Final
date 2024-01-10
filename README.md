@@ -1,1 +1,1 @@
-Code and Files for the week 10 Assignment for PromineoTech.
+Code and Files for the MySQL Final Project Assignment for PromineoTech.
